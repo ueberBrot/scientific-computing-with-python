@@ -120,14 +120,14 @@ class Category:
         titel_row: str = self.categorie.center(30, "*") + "\n"
         items: str = ""
 
-        for _entry in self.ledger:
+        for entry in self.ledger:
             # take only the first 23 characters of the description if its less or
             # more the length is still fixed to 23
             # the amount is right aligned and a has a max length of 7 inc.
             # 2 decimal point numbers
             items += (
-                f"{_entry.get('description')[0:23]:23}"
-                + f"{_entry.get('amount'):>7.2f}"
+                f"{entry.get('description')[0:23]:23}"
+                + f"{entry.get('amount'):>7.2f}"
                 + "\n"
             )
 
@@ -147,14 +147,14 @@ def create_spend_chart(categories: List) -> str:
     """
     plot: str = "Percentage spent by category\n"
     # calculate the total of everything spent in all categories
-    _total_spent: float = sum(x.spent for x in categories)
+    total_spent: float = sum(x.spent for x in categories)
     # create a list with the percentage values of the spending for every category
     # with the help of the floor division operator
-    _percentages: List[float] = [(x.spent / _total_spent) // 0.01 for x in categories]
+    percentages: List[float] = [(x.spent / total_spent) // 0.01 for x in categories]
 
     for p_value in range(100, -10, -10):
         plot += str(p_value).rjust(3, " ") + "|"
-        for percentage in _percentages:
+        for percentage in percentages:
             # if the percentage of the categorie is equal or greater than
             # the percentage value of the row add a new "bar"
             # else append 3 spaces
@@ -165,11 +165,11 @@ def create_spend_chart(categories: List) -> str:
         plot += " \n"
 
     # build the x axis
-    plot += " " * 4 + "-" * 3 * len(_percentages) + "-\n"
+    plot += " " * 4 + "-" * 3 * len(percentages) + "-\n"
     # calculate the length of the longest categorie
-    _longest_name: int = max(len(x.categorie) for x in categories)
+    longest_name: int = max(len(x.categorie) for x in categories)
 
-    for char in range(_longest_name):
+    for char in range(longest_name):
         # prepend 4 spaces before every row
         plot += " " * 4
         # for every name
